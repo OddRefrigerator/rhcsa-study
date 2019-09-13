@@ -1,0 +1,16 @@
+Id:             3
+Name:           rhcsa-server
+UUID:           277f124d-d194-49c3-94d7-745ef7a3e66f
+OS Type:        hvm
+State:          running
+CPU(s):         1
+CPU time:       123.8s
+Max memory:     1048576 KiB
+Used memory:    1048576 KiB
+Persistent:     yes
+Autostart:      disable
+Managed save:   no
+Security model: selinux
+Security DOI:   0
+Security label: system_u:system_r:svirt_t:s0:c309,c664 (enforcing)
+

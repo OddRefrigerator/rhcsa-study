@@ -1,0 +1,187 @@
+Reset the root passwords to "linuxacc" for all virtual machines
+
+++++++++++++++++++++++++++
+| Test ENV network setup |
+++++++++++++++++++++++++++
+
+--------------------------------------------------------------------------------
+| Host name                  | IPv4            | Gateway       | DNS           |
+|------------------------------------------------------------------------------|
+| server.linux-acc.local     | 192.168.122.150 | 192.168.122.1 | 192.168.122.1 | 
+|------------------------------------------------------------------------------|
+| client.linux-acc.local     | 192.168.122.151 | 192.168.122.1 | 192.168.122.1 |
+|------------------------------------------------------------------------------|
+| untrusted.linux-acc.local  | 192.168.122.160 | 192.168.122.1 | 192.168.122.1 |
+|------------------------------------------------------------------------------|
+
+==============================================
+++++++++++++++++==============================================
+| Server setup | ==============================================
+++++++++++++++++==============================================
+==============================================
+
+===============
+| Networking  |
+===============
+
+* Set the hostname to server.linux-acc.localhost
+* Configure IP, gateway, DNS
+* Configure static name resolution such that FQDN of each VM resolves correctly (even without DNS) from each of the other VMs.
+
+====================
+| server run level |
+====================
+* The Server Virtual machine should boot into runlevel 3 (CLI only)
+
+=========
+| Grub  |
+=========
+* Remove Red Hat graphical boot and quiet args and add serial tty for kernel
+
+======================
+| Disk configuration |
+======================
+* Create 5GB partion using \dev\vdb using fdisk
+* Create second partion using remiainiong space
+* Using second partion create volume group VG1
+* Create 500mb LV lv1 and format as ext4. Add to fstab with mount point /mnt/lvext4
+* Create 500mb LV lv2 and format as xfs. Add to fstab using UUID with moint point /mnt/lvxfs
+* Create 500mb LV lv3 and format as btrfs. Add to fstab using UUID with moint point /mnt/btrfs
+* Create 200mb swap and add to fstab
+* Extened lv1 by 500mb without losing data
+
+=======
+| ssh |
+=======
+* Create RSA 1024 bit ssh key for user root with comment root@linux-acc.local
+
+===========================
+| Create users and groups |
+===========================
+* Create users and groups on both your server and client virtual machines:
+
+Users
+=================
+tester (UID=2004), password: linuxacc
+ford (UID=2005), password: linuxacc
+carter (UID=2006), password: linuxacc, shell tcsh 
+reagan (UID=2007), password: linuxacc 
+clinton (UID=2008), password: linuxacc, expires in +20 days from current date
+
+Groups
+=================
+presidents (GID=2000; members=ford, carter, reagan, clinton)
+republicans (GID=2001; members=ford, reagan)
+democrats (GID=2002; members=carter, clinton)
+
+====================================
+| Create the following directories |
+====================================
+
+/share/presidents (use octal/symbolic notation)
+
+* All four ("presidential") users must be able to write here.
+* This directory must be owned by root and the group presidents.
+* Only users in this group should have any access to the directory.
+* Files created here should be owned by the group presidents.
+* Users should not be able to delete files they did not create.
+* This directory should have an SELinux fcontext that will permit it to be shared by multiple services.
+
+/share/presidents/republicans (use symbolic notation)
+
+* This directory should be owned by root and the group republicans.
+* Files created here should be owned by the group republicans.
+* Only users in this group should have any access to the directory.
+* Users should not be able to delete files they did not create.
+* This directory should have an SELinux fcontext that will permit it to be shared by multiple services.
+
+/share/presidents/democrats (use octal notation)
+
+* This directory should be owned by root and the group democrats.
+* Files created here should be owned by the group democrats.
+* Only users in this group should have any access to the directory.
+* Users should not be able to delete files they did not create.
+* This directory should have an SELinux fcontext that will permit it to be shared by multiple services.
+
+=========
+| chron |
+=========
+* Create chron task that runs every hour with top 5 CPU usage
+
+================================
+| configure yum ftp repository |
+================================
+* configure yum ftp repository with no gpg key
+* install vsftp service and configure firewall
+
+=============
+| setup NFS |
+=============
+* Setup /share/presidents to be shared with client machine(s) using NFS protocol
+
+===========================================
+| configure server as a local time server |
+===========================================
+* Configure NTP service and firewall for usage of local client(s) 
+
+
+==============================================
+++++++++++++++++==============================================
+| client setup | ==============================================
+++++++++++++++++==============================================
+==============================================
+
+====================
+| server run level |
+====================
+* The Server Virtual machine should boot into runlevel 5 GUI graphical
+
+================
+| compression  |
+================
+* Create tar file with gunzip compress of /etc/hosts file
+
+===============
+| Networking  |
+===============
+
+* Set the hostname to client.linux-acc.local
+* Configure IP, gateway, DNS
+* Configure static name resolution such that FQDN of each VM resolves correctly (even without DNS) from each of the other VMs. use scp to copy work from server
+
+===========================
+| Create users and groups |
+===========================
+* Create users and groups on both your server and client virtual machines:
+
+Users
+=================
+tester (UID=2004), password: linuxacc
+ford (UID=2005), password: linuxacc
+carter (UID=2006), password: linuxacc, shell tsch 
+reagan (UID=2007), password: linuxacc 
+clinton (UID=2008), password: linuxacc, expires in +20 days from current date
+
+Groups
+=================
+presidents (GID=2000; members=ford, carter, reagan, clinton)
+republicans (GID=2001; members=ford, reagan)
+democrats (GID=2002; members=carter, clinton)
+
+=============
+| setup NFS |
+=============
+* Permanetly mount remote NFS /share/presidents locally at /home/remote/presidents/
+
+=============================================
+| configure client to sync time with server |
+=============================================
+* Configure client to use server only as NTP source
+
+
+==============================================
+++++++++++++++++==============================================
+| untrusted setup | ==============================================
+++++++++++++++++==============================================
+==============================================
+
