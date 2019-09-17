@@ -1,6 +1,6 @@
 #!/bin/bash
 
-vmName=srvVM
+vmName=clientVM
 vmStore=/home/steve/vm
 vmISO=/home/steve/vm/iso/CentOS-7-x86_64-DVD-1810.iso
 
@@ -36,4 +36,4 @@ virt-install --name $vmName \
 --os-variant=rhel7.5 \
 --graphics spice \
 --location=$vmISO \
---initrd-inject '/home/steve/vm/kickstart/ksSrv.cfg' --extra-args 'ks=file:/ksSrv.cfg console=tty0'
+--initrd-inject '/home/steve/vm/kickstart/ksClient.cfg' --extra-args 'ks=file:/ksClient.cfg console=tty0'

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-vmName=srvVM
+vmName=clientVM
 vmStore=/home/steve/vm
 vmISO=/home/steve/vm/iso/CentOS-7-x86_64-DVD-1810.iso
 
