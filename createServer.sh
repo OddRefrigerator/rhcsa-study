@@ -21,16 +21,22 @@ EOF
 echo 'Create storage pool'
 virsh pool-create-as --name $vmName --type dir --target $vmStore/$vmName
 
-#Disk creation
-echo 'Create new fs'
+#primary O/S disk
+echo 'Create disk for O/S'
 export LIBGUESTFS_BACKEND=direct
 qemu-img create -f qcow2 -o preallocation=metadata $vmName.qcow2 60G
+
+#Spare HD for VG/LVM practice
+echo 'Create disk for practice'
+qemu-img create -f qcow2 -o preallocation=metadata $vmName.spare.qcow2 60G
+
 
 #Create virtual machine
 echo 'Create new virtual machine'
 virt-install --name $vmName \
 --memory 2048 --vcpus 2 --cpu host \
 --disk $vmName.qcow2,format=qcow2,bus=virtio \
+--disk $vmName.spare.qcow2,format=qcow2,bus=virtio \
 --network bridge=virbr0,model=virtio \
 --os-type=linux \
 --os-variant=rhel7.5 \
