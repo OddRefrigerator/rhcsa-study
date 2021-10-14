@@ -1,8 +1,8 @@
 #!/bin/bash
 
 vmName=srvVM
-vmStore=/home/steve/vm
-vmISO=/home/steve/vm/iso/CentOS-7-x86_64-DVD-1810.iso
+vmStore=/home/steve/virtual-machines
+vmISO=/home/steve/iso/rhel-8.4-x86_64-dvd.iso
 
 #Remove virtual machine
 echo 'Shuting down and removing virtual machine'
