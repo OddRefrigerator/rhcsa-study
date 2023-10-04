@@ -1,8 +1,7 @@
 #!/bin/bash
 
-vmName=node1
+vmName=client
 vmStore=/home/steve/virtual-machines
-vmISO=/home/steve/iso/rhel-8.4-x86_64-dvd.iso
 
 #Remove virtual machine
 echo 'Shuting down and removing virtual machine'

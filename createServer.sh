@@ -1,8 +1,8 @@
 #!/bin/bash
 
-vmName=srvVM
+vmName=server
 vmStore=/home/steve/virtual-machines
-vmISO=/home/steve/iso/rhel-8.4-x86_64-dvd.iso
+vmISO=/home/steve/iso/rhel-9.2-x86_64-dvd.iso
 
 echo 'Creating directories'
 mkdir -vp $vmStore/$vmName
@@ -38,9 +38,8 @@ virt-install --name $vmName \
 --disk $vmName.qcow2,format=qcow2,bus=virtio \
 --disk $vmName.spare.qcow2,format=qcow2,bus=virtio \
 --network bridge=virbr0,model=virtio \
---os-type=linux \
---os-variant=rhel8.4 \
+--os-variant=rhel9.2 \
 --graphics spice \
 --location=$vmISO \
---initrd-inject '/home/steve/git-projects/rhcsa-study/kickstart/ksSrv.cfg' \
+--initrd-inject '/home/steve/gitProjects/rhcsa-study/kickstart/ksSrv.cfg' \
 --extra-args 'inst.ks=file:/ksSrv.cfg'

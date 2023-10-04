@@ -1,4 +1,15 @@
-Reset the root passwords to "linuxacc" for all virtual machines
+                                                                                        
+          .-: .--:.                                                                       
+         -##########+=.                                                                   
+        .##############.          .....                  .:.   ..     ..                  
+        *##############+         -@@@@@@@+               %@+   @@=   -@@.         *@*     
+   -+##%@@%#############.        -@@   -@@-:*%@%*:  -#%@%@@+   @@+...=@@.-#%@@%=:%@@@%#   
+  -#####%@@@@%%########%#:       -@@@%@@@+:@@+=+@@:+@%: .@@+   @@@@@@@@@. =--+@@:.#@#.    
+   +######%%@@@@@@@@@@@@%##=     -@@..*@@.:@@*==+=:*@#. .@@+   @@=   -@@.%@+=*@@. #@#     
+    :+#########%%%%%%%%#####=    -@@   +@@::#@@@%-  =%@@%@@=   @@=   -@@.+@%%%@@. -%@@#   
+       -+###################-                                                             
+          .-=+*###########+:                                                              
+                ..::::::.                                                                
 
 ++++++++++++++++++++++++++
 | Test ENV network setup |
@@ -14,29 +25,38 @@ Reset the root passwords to "linuxacc" for all virtual machines
 | untrusted.linux-acc.local  | 192.168.122.160 | 192.168.122.1 | 192.168.122.1 |
 |------------------------------------------------------------------------------|
 
+==================
+| Password reset |
+==================
+Reset the root passwords to "linuxacc" for all virtual machines
+
 ==============================================
 ++++++++++++++++==============================================
 | Server setup | ==============================================
 ++++++++++++++++==============================================
 ==============================================
 
-===============
-| Networking  |
-===============
-
-* Set the hostname to server.linux-acc.local
-* Configure IP, gateway, DNS
-* Configure static name resolution such that FQDN of each VM resolves correctly (even without DNS) from each of the other VMs.
+=========
+| Grub  |
+=========
+* Remove Red Hat graphical boot and quiet args and add serial tty for kernel
 
 ====================
 | server run level |
 ====================
 * The Server Virtual machine should boot into runlevel 3 (CLI only)
 
-=========
-| Grub  |
-=========
-* Remove Red Hat graphical boot and quiet args and add serial tty for kernel
+===============
+| Networking  |
+===============
+* Set the hostname to server.linux-acc.local
+* Configure IP, gateway, DNS
+* Configure static name resolution such that FQDN of each VM resolves correctly (even without DNS) from each of the other VMs.
+
+=======
+| ssh |
+=======
+* Create RSA 1024 bit ssh key for user root with comment root@linux-acc.local 
 
 ======================
 | Disk configuration |
@@ -50,11 +70,6 @@ Reset the root passwords to "linuxacc" for all virtual machines
 * Create 200mb swap and add to fstab
 * Extened lv1 by 500mb without losing data
 
-=======
-| ssh |
-=======
-* Create RSA 1024 bit ssh key for user root with comment root@linux-acc.local
-
 ===========================
 | Create users and groups |
 ===========================
@@ -63,75 +78,88 @@ Reset the root passwords to "linuxacc" for all virtual machines
 Users
 =================
 tester (UID=2004), password: linuxacc
-ford (UID=2005), password: linuxacc
-carter (UID=2006), password: linuxacc, shell tcsh 
-reagan (UID=2007), password: linuxacc 
-clinton (UID=2008), password: linuxacc, expires in +20 days from current date
+luke (UID=2005), password: linuxacc
+han (UID=2006), password: linuxacc, shell tcsh 
+vadar (UID=2007), password: linuxacc 
+thrawn (UID=2008), password: linuxacc, expires in +20 days from current date
 
 Groups
 =================
-presidents (GID=2000; members=ford, carter, reagan, clinton)
-republicans (GID=2001; members=ford, reagan)
-democrats (GID=2002; members=carter, clinton)
+republic (GID=2000; members=luke, han)
+empire (GID=2001; members=vadar, thrawn)
+jedi (GID=2002; members=luke, vadar)
 
 ====================================
 | Create the following directories |
 ====================================
 
-/share/presidents (use octal/symbolic notation)
+/share/starwars (use octal or symbolic notation)
 
-* All four ("presidential") users must be able to write here.
-* This directory must be owned by root and the group presidents.
+* All users in the jedi group must be able to write here.
+* This directory must be owned by root and the group jedi.
 * Only users in this group should have any access to the directory.
-* Files created here should be owned by the group presidents.
+* Files created here should be owned by the group jedi.
 * Users should not be able to delete files they did not create.
 * This directory should have an SELinux fcontext that will permit it to be shared by multiple services.
 
-/share/presidents/republicans (use symbolic notation)
+/share/starwars/republic (use symbolic notation)
 
-* This directory should be owned by root and the group republicans.
-* Files created here should be owned by the group republicans.
+* This directory should be owned by root and the group republic.
+* Files created here should be owned by the group republic.
 * Only users in this group should have any access to the directory.
 * Users should not be able to delete files they did not create.
 * This directory should have an SELinux fcontext that will permit it to be shared by multiple services.
 
-/share/presidents/democrats (use octal notation)
+/share/starwars/empire (use octal notation)
 
-* This directory should be owned by root and the group democrats.
-* Files created here should be owned by the group democrats.
+* This directory should be owned by root and the group empire.
+* Files created here should be owned by the group empire.
 * Only users in this group should have any access to the directory.
 * Users should not be able to delete files they did not create.
 * This directory should have an SELinux fcontext that will permit it to be shared by multiple services.
+
+==================
+| File management |
+==================
+* Find all files greater than 4MB in the /etc directory and copy them to /find/largefiles
 
 =========
 | chron |
 =========
-* Create chron task that runs every hour with top 5 CPU usage
+* Create chron task that runs at 13:30 daily for the user tester and executes /bin/echo hello
 
-================================
-| configure yum ftp repository |
-================================
-* configure yum ftp repository with no gpg key
-
-==================
-| Install apache |
-==================
-* install httpd service and configure firewall
+====================================
+| configure a local yum repository |
+====================================
+* configure a local yum repository with no gpg key
 
 =============
 | setup NFS |
 =============
-* Setup /share/presidents to be shared with client machine(s) using NFS protocol
+* Setup /share/starwars to be shared with the client machine using NFS protocol
+
+==================
+| Install apache |
+==================
+* install httpd service and configure firewall, SELinux port access
 
 ===========================================
 | configure server as a local time server |
 ===========================================
 * Configure NTP service and firewall for usage of local client(s)
 
-=====================
-| configure kerbose |
-=====================
+=========
+| Tuned |
+=========
+* Set the recomened tunning profile for the system 
 
+============== 
+| Containers |
+==============
+* Install container tools
+* Download apache container image from registery
+* Create a container as a system startup service
+* Modify the index.html file in the container to display "Hello world!".
 
 ==============================================
 ++++++++++++++++==============================================
@@ -165,27 +193,26 @@ democrats (GID=2002; members=carter, clinton)
 Users
 =================
 tester (UID=2004), password: linuxacc
-ford (UID=2005), password: linuxacc
-carter (UID=2006), password: linuxacc, shell tsch 
-reagan (UID=2007), password: linuxacc 
-clinton (UID=2008), password: linuxacc, expires in +20 days from current date
+luke (UID=2005), password: linuxacc
+han (UID=2006), password: linuxacc, shell tcsh 
+vadar (UID=2007), password: linuxacc 
+thrawn (UID=2008), password: linuxacc, expires in +20 days from current date
 
 Groups
 =================
-presidents (GID=2000; members=ford, carter, reagan, clinton)
-republicans (GID=2001; members=ford, reagan)
-democrats (GID=2002; members=carter, clinton)
+republic (GID=2000; members=luke, han)
+empire (GID=2001; members=vadar, thrawn)
+jedi (GID=2002; members=luke, vadar)
 
 =============
 | setup NFS |
 =============
-* Permanetly mount remote NFS /share/presidents locally at /home/remote/presidents/
+* Permanetly mount remote NFS /share/starwars locally at /home/remote/starwars/
 
 =============================================
 | configure client to sync time with server |
 =============================================
 * Configure client to use server only as NTP source
-
 
 ==============================================
 ++++++++++++++++==============================================

@@ -1,8 +1,8 @@
 #!/bin/bash
 
-vmName=node1
+vmName=client
 vmStore=/home/steve/virtual-machines
-vmISO=/home/steve/iso/rhel-8.4-x86_64-dvd.iso
+vmISO=/home/steve/iso/rhel-9.2-x86_64-dvd.iso
 
 echo 'Creating directories'
 mkdir -vp $vmStore/$vmName
@@ -32,10 +32,9 @@ virt-install --name $vmName \
 --memory 2048 --vcpus 2 --cpu host \
 --disk $vmName.qcow2,format=qcow2,bus=virtio \
 --network bridge=virbr0,model=virtio \
---os-type=linux \
---os-variant=rhel8.4 \
+--os-variant=rhel9.2 \
 --graphics spice \
 --location=$vmISO \
 --check path_in_use=off \
---initrd-inject '/home/steve/git-projects/rhcsa-study/kickstart/ksClient.cfg' \
+--initrd-inject '/home/steve/gitProjects/rhcsa-study/kickstart/ksClient.cfg' \
 --extra-args 'inst.ks=file:/ksClient.cfg'

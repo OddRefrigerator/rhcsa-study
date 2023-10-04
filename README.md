@@ -1,8 +1,14 @@
-# rhcsa-study
-rhcsa study materials
+# Red Hat Certified System Administrator (RHCSA) study guide
+RHCSA EX200 study materials
 
-### Create Server
+### Create server virtual machine
 createServer.sh
 
-### Create node
+### Remove server virtual machine
+removeServer.sh
+
+### Create client virtual machine
 createClient.sh
+
+### Remove client virtual machine
+RemoveClient.sh
