@@ -61,7 +61,7 @@ Reset the root passwords to "linuxacc" for all virtual machines
 ======================
 | Disk configuration |
 ======================
-* Create 5GB partion using \dev\vdb using fdisk
+* Create 5GB partion using /dev/vdb using fdisk
 * Create second partion using remiainiong space
 * Using second partion create volume group vg1
 * Create 500mb LV lv1 and format as ext4. Add to fstab with mount point /mnt/ext4HD
